@@ -15,6 +15,10 @@ after_success:
   - docker build -t aniejek/multi-server ./server
   - docker build -t aniejek/multi-worker ./worker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker tag aniejek/multi-client aniejek/multi-client:$VERSION.TRAVIS_BUILD_NUMBER
+  - docker tag aniejek/multi-client aniejek/multi-nginx:$VERSION.TRAVIS_BUILD_NUMBER
+  - docker tag aniejek/multi-client aniejek/multi-server:$VERSION.TRAVIS_BUILD_NUMBER
+  - docker tag aniejek/multi-client aniejek/multi-worker:$VERSION.TRAVIS_BUILD_NUMBER
   - docker push aniejek/multi-client
   - docker push aniejek/multi-nginx
   - docker push aniejek/multi-server
