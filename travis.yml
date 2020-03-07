@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t aniejek/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run -e CI=true aniejek/react-test npm test -- --coverage --watchAll=false
+
+after_success:
+  - docker build -t aniejek/multi-client ./client
+  - docker build -t aniejek/multi-nginx ./nginx
+  - docker build -t aniejek/multi-server ./server
+  - docker build -t aniejek/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push aniejek/multi-client
+  - docker push aniejek/multi-nginx
+  - docker push aniejek/multi-server
+  - docker push aniejek/multi-worker
