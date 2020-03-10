@@ -19,7 +19,24 @@ after_success:
   - docker tag aniejek/multi-nginx aniejek/multi-nginx:$VERSION.$TRAVIS_BUILD_NUMBER
   - docker tag aniejek/multi-server aniejek/multi-server:$VERSION.$TRAVIS_BUILD_NUMBER
   - docker tag aniejek/multi-worker aniejek/multi-worker:$VERSION.$TRAVIS_BUILD_NUMBER
+  - docker tag aniejek/multi-client aniejek/multi-client:latest
+  - docker tag aniejek/multi-nginx aniejek/multi-nginx:latest
+  - docker tag aniejek/multi-server aniejek/multi-server:latest
+  - docker tag aniejek/multi-worker aniejek/multi-worker:latest
   - docker push aniejek/multi-client
   - docker push aniejek/multi-nginx
   - docker push aniejek/multi-server
   - docker push aniejek/multi-worker
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-us-east-2-532192899375
+  bucket_path: docker-multi
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
